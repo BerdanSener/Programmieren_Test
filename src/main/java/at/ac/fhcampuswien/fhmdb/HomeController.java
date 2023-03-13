@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
@@ -43,7 +44,7 @@ public class HomeController implements Initializable {
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
-        // TODO add genre filter items with genreComboBox.getItems().addAll(...)
+        genreComboBox.getItems().addAll(Genre.toStringArray());
         genreComboBox.setPromptText("Filter by Genre");
 
         // TODO add event handlers to buttons and call the regarding methods
@@ -52,14 +53,26 @@ public class HomeController implements Initializable {
         // Sort button example:
         sortBtn.setOnAction(actionEvent -> {
             if(sortBtn.getText().equals("Sort (asc)")) {
-                // TODO sort observableMovies ascending
+                this.sortMovies(true);
                 sortBtn.setText("Sort (desc)");
             } else {
                 // TODO sort observableMovies descending
+                this.sortMovies(false);
                 sortBtn.setText("Sort (asc)");
             }
         });
+    }
 
+    public void sortMovies(boolean ascOrDesc){
+        // asc -> true
+        if(ascOrDesc){
+
+        }
+
+        // desc -> false
+        if(!ascOrDesc){
+
+        }
 
     }
 }
