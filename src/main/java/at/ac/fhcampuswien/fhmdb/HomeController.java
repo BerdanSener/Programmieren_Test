@@ -55,18 +55,6 @@ public class HomeController implements Initializable {
 
         genreComboBox.getItems().addAll(Genre.toStringArray());
         genreComboBox.setPromptText("Filter by Genre");
-        observableMovies.addListener(new InvalidationListener() {
-            @Override
-            public void invalidated(Observable observable) {
-                //movieListView.getItems().clear();
-                System.out.println("Something changed");
-                movieListView.setItems(observableMovies);   // set data of observable list to list view
-                movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data*/
-            }
-        });
-
-
-
         // initialize UI stuff
 
 
@@ -88,7 +76,7 @@ public class HomeController implements Initializable {
 
         //searchBtn.setDisable(true);
 
-        searchBtn.setOnAction(actionEvent -> {searchMovies();});
+        searchBtn.setOnAction(actionEvent -> searchMovies());
     }
 
 
@@ -122,40 +110,17 @@ public class HomeController implements Initializable {
         }
     }
 
-    public void searchMovies(){
-        boolean flag = true; // reset List
-        //movieListView.getItems().clear();
+    public void searchMovies() {
         List<Movie> sortedList = new ArrayList<>();
-        for(int i = 0; i < observableMovies.size(); i++){
-            if(searchField.getText().contains(observableMovies.get(i).getTitle())){
-                sortedList.add(observableMovies.get(i));
-                System.out.println("test " + i + "ist dabei");
-            }
+        if(!searchField.getText().isEmpty() && (genreComboBox.getValue() != null && genreComboBox.getValue().toString() != "---")){
+            System.out.println("Es ist beschrieben und ein wert in combobox");
         }
-        if(!sortedList.isEmpty() && !(searchField.getText().isEmpty())){
+        else if(searchField.getText().isEmpty() && genreComboBox.getValue().equals("---")){ //reset condition
+            movieListView.getItems().clear();
             observableMovies.removeAll(observableMovies);
-            observableMovies.addAll(sortedList);
-            flag = false;
-
-        }else{
-            System.out.println("kein text aber leer");
-            observableMovies.removeAll(observableMovies);
-            sortedList = Movie.initializeMovies();
-            observableMovies.addAll(sortedList);
+            observableMovies.addAll(allMovies);
+            movieListView.refresh();
         }
-        //observableMovies.addAll(sortedList);
-            /*List<Genre> genrelisttest = new ArrayList<>();
-            genrelisttest.add(Genre.ACTION);
-            observableMovies.add(new Movie("test", "test2", genrelisttest));*/
 
-    }
-
-    public void disableSearchButton(){
-        if(searchField.getText().isEmpty()){
-            searchBtn.setDisable(true);
-        }
-        else{
-            searchBtn.setDisable(false);
-        }
     }
 }

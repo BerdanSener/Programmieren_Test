@@ -23,6 +23,8 @@ public class Movie {
         return description;
     }
 
+    public List<Genre> getGenres(){return genres;}
+
     public static List<Movie> initializeMovies(){
         List<Movie> movies = new ArrayList<>();
 
