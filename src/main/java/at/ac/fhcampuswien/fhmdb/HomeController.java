@@ -101,6 +101,7 @@ public class HomeController implements Initializable {
 
     public void searchMovies(){
         boolean flag = true; // reset List
+        //movieListView.getItems().clear();
         List<Movie> sortedList = new ArrayList<>();
         for(int i = 0; i < observableMovies.size(); i++){
             if(searchField.getText().contains(observableMovies.get(i).getTitle())){
@@ -112,6 +113,7 @@ public class HomeController implements Initializable {
             observableMovies.removeAll(observableMovies);
             observableMovies.addAll(sortedList);
             flag = false;
+
         }else{
             System.out.println("kein text aber leer");
             observableMovies.removeAll(observableMovies);
@@ -122,6 +124,7 @@ public class HomeController implements Initializable {
             /*List<Genre> genrelisttest = new ArrayList<>();
             genrelisttest.add(Genre.ACTION);
             observableMovies.add(new Movie("test", "test2", genrelisttest));*/
+
     }
 
     public void disableSearchButton(){
