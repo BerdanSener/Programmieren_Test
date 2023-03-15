@@ -83,31 +83,7 @@ public class HomeController implements Initializable {
 
         //searchBtn.setDisable(true);
 
-        searchBtn.setOnAction(actionEvent -> {
-            boolean flag = true; // reset List
-            List<Movie> sortedList = new ArrayList<>();
-            for(int i = 0; i < observableMovies.size(); i++){
-                if(searchField.getText().contains(observableMovies.get(i).getTitle())){
-                    sortedList.add(observableMovies.get(i));
-                    System.out.println("test " + i + "ist dabei");
-                }
-            }
-            if(!sortedList.isEmpty() && !(searchField.getText().isEmpty())){
-                observableMovies.removeAll(observableMovies);
-                observableMovies.addAll(sortedList);
-                flag = false;
-            }else{
-                System.out.println("kein text aber leer");
-                observableMovies.removeAll(observableMovies);
-                sortedList = Movie.initializeMovies();
-                observableMovies.addAll(sortedList);
-            }
-            //observableMovies.addAll(sortedList);
-            /*List<Genre> genrelisttest = new ArrayList<>();
-            genrelisttest.add(Genre.ACTION);
-            observableMovies.add(new Movie("test", "test2", genrelisttest));*/
-
-        });
+        searchBtn.setOnAction(actionEvent -> {searchMovies();});
     }
 
     public void sortMovies(boolean ascOrDesc){
@@ -121,6 +97,31 @@ public class HomeController implements Initializable {
 
         }
 
+    }
+
+    public void searchMovies(){
+        boolean flag = true; // reset List
+        List<Movie> sortedList = new ArrayList<>();
+        for(int i = 0; i < observableMovies.size(); i++){
+            if(searchField.getText().contains(observableMovies.get(i).getTitle())){
+                sortedList.add(observableMovies.get(i));
+                System.out.println("test " + i + "ist dabei");
+            }
+        }
+        if(!sortedList.isEmpty() && !(searchField.getText().isEmpty())){
+            observableMovies.removeAll(observableMovies);
+            observableMovies.addAll(sortedList);
+            flag = false;
+        }else{
+            System.out.println("kein text aber leer");
+            observableMovies.removeAll(observableMovies);
+            sortedList = Movie.initializeMovies();
+            observableMovies.addAll(sortedList);
+        }
+        //observableMovies.addAll(sortedList);
+            /*List<Genre> genrelisttest = new ArrayList<>();
+            genrelisttest.add(Genre.ACTION);
+            observableMovies.add(new Movie("test", "test2", genrelisttest));*/
     }
 
     public void disableSearchButton(){
