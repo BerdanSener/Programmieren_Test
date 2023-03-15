@@ -18,6 +18,7 @@ import javafx.scene.control.TextField;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -89,14 +90,31 @@ public class HomeController implements Initializable {
     public void sortMovies(boolean ascOrDesc){
         // asc -> true
         if(ascOrDesc){
-
+            this.observableMovies.sort(new Comparator<Movie>() {
+                @Override
+                public int compare(Movie o1, Movie o2) {
+                    if(o1.getTitle().toLowerCase().charAt(0) > o2.getTitle().toLowerCase().charAt(0)){
+                        return 1;
+                    }else {
+                        return 0;
+                    }
+                }
+            });
         }
 
         // desc -> false
         if(!ascOrDesc){
-
+            this.observableMovies.sort(new Comparator<Movie>() {
+                @Override
+                public int compare(Movie o1, Movie o2) {
+                    if(o1.getTitle().toLowerCase().charAt(0) > o2.getTitle().toLowerCase().charAt(0)){
+                        return 0;
+                    }else {
+                        return 1;
+                    }
+                }
+            });
         }
-
     }
 
     public void searchMovies(){

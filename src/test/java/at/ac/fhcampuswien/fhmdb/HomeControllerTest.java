@@ -1,16 +1,12 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import org.junit.jupiter.api.BeforeEach;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class HomeControllerTest {
 
-    @Test
-    void sort_movies_asc_if_parameter_is_true(){
-        // given
-
-        //when
-
-        //then
-
+    @BeforeEach
+    void setUp() {
     }
 }
