@@ -40,6 +40,10 @@ public class HomeController implements Initializable {
 
     public List<Movie> allMovies = Movie.initializeMovies();
 
+    public ObservableList<Movie> getObservableMovies() {
+        return observableMovies;
+    }
+
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
 
@@ -86,6 +90,7 @@ public class HomeController implements Initializable {
 
         searchBtn.setOnAction(actionEvent -> {searchMovies();});
     }
+
 
     public void sortMovies(boolean ascOrDesc){
         // asc -> true
