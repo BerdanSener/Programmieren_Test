@@ -57,6 +57,19 @@ class HomeControllerTest {
     }
 
     @Test
+    void filter_by_genre_musical(){
+        List<Movie> movies = Movie.initializeMovies();
+        ArrayList<Movie> filteredByGenre = homeController.filterByGenre((ArrayList<Movie>) movies, Genre.MUSICAL.toString());
+        ArrayList<String> actual = new ArrayList<>();
+        for(Movie m : filteredByGenre){
+            actual.add(m.getTitle());
+        }
+
+        ArrayList<String> expected = new ArrayList<>();
+        assertEquals(expected, actual);
+    }
+
+    @Test
     void return_no_movies_if_no_movie_is_listed_in_given_genre(){
         List<Movie> movies = Movie.initializeMovies();
 
@@ -100,6 +113,22 @@ class HomeControllerTest {
 
         ArrayList<String> expected = new ArrayList<>();
         expected.add("Puss in Boots");
+
+        assertEquals(expected, actual);
+    }
+
+    @Test
+    void search_is_case_insensitive(){
+        List<Movie> movies = Movie.initializeMovies();
+
+        ArrayList<Movie> searchedForText = homeController.searchForText(movies, "wOlF OF wAllStreet");
+        ArrayList<String> actual = new ArrayList<>();
+        for (Movie m : searchedForText) {
+            actual.add(m.getTitle());
+        }
+
+        ArrayList<String> expected = new ArrayList<>();
+        expected.add("Wolf of Wallstreet");
 
         assertEquals(expected, actual);
     }

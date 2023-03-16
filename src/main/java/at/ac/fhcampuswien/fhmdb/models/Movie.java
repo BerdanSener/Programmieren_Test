@@ -40,7 +40,7 @@ public class Movie {
         genres.add(Genre.ROMANCE);
         movies.add(new Movie("Life is Beautiful", "A film about a beautiful life", genres));
 
-        //Film 2 -> Life is Beautiful
+        //Film 3 -> Puss in Boots
         genres = new ArrayList<>();
         genres.add(Genre.CRIME);
         genres.add(Genre.FAMILY);
@@ -48,5 +48,19 @@ public class Movie {
         movies.add(new Movie("Puss in Boots", "The puss in boots is a cool film about a puss in boots", genres));
 
         return movies;
+    }
+
+    public static boolean checkMovies(List<Movie> movies){
+        boolean flag = true;
+        outerloop:
+        for(Movie m : movies){
+            if(flag == true){
+                if(!((m.getTitle() != null) && (m.getDescription() != null) && (m.getGenres() != null))){
+                    flag = false;
+                    break outerloop;
+                }
+            }
+        }
+        return flag;
     }
 }
