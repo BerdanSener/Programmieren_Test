@@ -25,6 +25,8 @@ import java.util.ResourceBundle;
 public class HomeController implements Initializable {
     @FXML
     public JFXButton searchBtn;
+    @FXML
+    public JFXButton resetBtn;
 
     @FXML
     public TextField searchField;
@@ -73,10 +75,8 @@ public class HomeController implements Initializable {
                 sortBtn.setText("Sort (asc)");
             }
         });
-
-        //searchBtn.setDisable(true);
-
         searchBtn.setOnAction(actionEvent -> searchMovies());
+        resetBtn.setOnAction(actionEvent -> resetMovies());
     }
 
 
@@ -111,16 +111,45 @@ public class HomeController implements Initializable {
     }
 
     public void searchMovies() {
-        List<Movie> sortedList = new ArrayList<>();
-        if(!searchField.getText().isEmpty() && (genreComboBox.getValue() != null && genreComboBox.getValue().toString() != "---")){
-            System.out.println("Es ist beschrieben und ein wert in combobox");
+        ArrayList<Movie> filteredMovies = new ArrayList<>();
+        if (!this.searchField.getText().isEmpty()){
+            for (Movie m : allMovies) {
+                if (m.getTitle().toLowerCase().contains(this.searchField.getText().toLowerCase())){
+                    filteredMovies.add(m);
+                }
+            }
+        }else {
+            filteredMovies.addAll(allMovies);
         }
-        else if(searchField.getText().isEmpty() && genreComboBox.getValue().equals("---")){ //reset condition
-            movieListView.getItems().clear();
-            observableMovies.removeAll(observableMovies);
-            observableMovies.addAll(allMovies);
-            movieListView.refresh();
+        if (this.genreComboBox.getValue() != null){
+            filteredMovies = filterByGenre(filteredMovies);
         }
+        resetMovies(filteredMovies);
+    }
 
+    public ArrayList<Movie> filterByGenre(ArrayList<Movie> movies){
+        ArrayList<Movie> filteredList = new ArrayList<>();
+        for (Movie m : movies) {
+            for (Genre g : m.getGenres()) {
+                if (g.toString().equals(this.genreComboBox.getValue().toString())){
+                    filteredList.add(m);
+                    break;
+                }
+            }
+        }
+        return filteredList;
+    }
+
+    public void resetMovies(ArrayList<Movie> movies){
+        this.observableMovies.removeAll(observableMovies);
+        this.observableMovies.addAll(movies);
+    }
+
+    public void resetMovies(){
+        this.observableMovies.removeAll(observableMovies);
+        this.observableMovies.addAll(allMovies);
+        this.genreComboBox.getSelectionModel().clearSelection();
+        sortBtn.setText("Sort (asc)");
+        searchField.setText("");
     }
 }

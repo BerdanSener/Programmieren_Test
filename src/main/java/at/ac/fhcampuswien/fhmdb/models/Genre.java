@@ -8,7 +8,7 @@ public enum Genre {
     WESTERN;
 
     public static String[] toStringArray(){
-        String[] genres = {"---", "ACTION", "ADVENTURE", "ANIMATION", "BIOGRAPHY", "COMEDY",
+        String[] genres = {"ACTION", "ADVENTURE", "ANIMATION", "BIOGRAPHY", "COMEDY",
                 "CRIME", "DRAMA", "DOCUMENTARY", "FAMILY", "FANTASY", "HISTORY", "HORROR",
                 "MUSICAL", "MYSTERY", "ROMANCE", "SCIENCE_FICTION", "SPORT", "THRILLER", "WAR",
                 "WESTERN"};
