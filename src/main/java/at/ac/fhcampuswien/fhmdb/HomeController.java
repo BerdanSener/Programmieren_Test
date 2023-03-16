@@ -42,10 +42,6 @@ public class HomeController implements Initializable {
 
     public List<Movie> allMovies = Movie.initializeMovies();
 
-    public ObservableList<Movie> getObservableMovies() {
-        return observableMovies;
-    }
-
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
 
@@ -112,28 +108,36 @@ public class HomeController implements Initializable {
 
     public void searchMovies() {
         ArrayList<Movie> filteredMovies = new ArrayList<>();
-        if (!this.searchField.getText().isEmpty()){
-            for (Movie m : allMovies) {
-                if (m.getTitle().toLowerCase().contains(this.searchField.getText().toLowerCase())){
-                    filteredMovies.add(m);
-                }
-            }
-        }else {
-            filteredMovies.addAll(allMovies);
-        }
+        filteredMovies = searchForText(allMovies, this.searchField.getText());
         if (this.genreComboBox.getValue() != null){
-            filteredMovies = filterByGenre(filteredMovies);
+            filteredMovies = filterByGenre(filteredMovies, this.genreComboBox.getValue().toString());
         }
         resetMovies(filteredMovies);
     }
 
-    public ArrayList<Movie> filterByGenre(ArrayList<Movie> movies){
+    public ArrayList<Movie> searchForText(List<Movie> movies, String searchText){
+        ArrayList<Movie> foundMovies = new ArrayList<>();
+        if (!searchText.isEmpty()){
+            for (Movie m : movies) {
+                if (m.getTitle().toLowerCase().contains(searchText.toLowerCase())){
+                    foundMovies.add(m);
+                }
+            }
+        }else {
+            foundMovies.addAll(allMovies);
+        }
+        return foundMovies;
+    }
+
+    public ArrayList<Movie> filterByGenre(ArrayList<Movie> movies, String genre){
         ArrayList<Movie> filteredList = new ArrayList<>();
         for (Movie m : movies) {
-            for (Genre g : m.getGenres()) {
-                if (g.toString().equals(this.genreComboBox.getValue().toString())){
-                    filteredList.add(m);
-                    break;
+            if(m.getGenres() != null){
+                for (Genre g : m.getGenres()) {
+                    if (g.toString().equals(genre)){
+                        filteredList.add(m);
+                        break;
+                    }
                 }
             }
         }
