@@ -119,7 +119,7 @@ public class HomeController implements Initializable {
         ArrayList<Movie> foundMovies = new ArrayList<>();
         if (!searchText.isEmpty()){
             for (Movie m : movies) {
-                if (m.getTitle().toLowerCase().contains(searchText.toLowerCase())){
+                if (m.getDescription().toLowerCase().contains(searchText.toLowerCase())){
                     foundMovies.add(m);
                 }
             }
