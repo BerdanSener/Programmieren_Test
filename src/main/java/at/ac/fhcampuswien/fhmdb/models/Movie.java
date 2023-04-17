@@ -50,6 +50,8 @@ public class Movie {
 
     public List<Genre> getGenres(){return genres;}
 
+    public ArrayList<String> getDirectors(){return directors;}
+
     public static List<Movie> initializeMovies(){
         List<Movie> movies = new ArrayList<>();
 
@@ -97,4 +99,6 @@ public class Movie {
         }
         return flag;
     }
+
+    public int getYear() {return releaseYear;}
 }

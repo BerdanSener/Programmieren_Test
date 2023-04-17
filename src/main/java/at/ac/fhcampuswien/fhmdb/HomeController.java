@@ -17,6 +17,9 @@ import javafx.scene.control.TextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class HomeController implements Initializable {
     @FXML
@@ -52,6 +55,18 @@ public class HomeController implements Initializable {
         try {
             ArrayList<Movie> movies = MovieAPI.loadMovies();
             observableMovies.addAll(movies);         // add dummy data to observable list
+
+            // Code to test functions
+
+            for(Movie testmovies : getMoviesBetweenYears(movies, 1999, 2005)){
+                System.out.println("Title: " + testmovies.getTitle());
+            }
+            //System.out.println(getMoviesBetweenYears(movies, 1999, 2005));
+
+
+            System.out.println(countMoviesFrom(movies, "Frank Darabont"));
+
+            System.out.println(getLongestMovieTitle(movies));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -96,6 +111,7 @@ public class HomeController implements Initializable {
         });
         searchBtn.setOnAction(actionEvent -> searchMovies());
         resetBtn.setOnAction(actionEvent -> resetMovies());
+
 
     }
 
@@ -151,35 +167,6 @@ public class HomeController implements Initializable {
             throw new RuntimeException(e);
         }
     }
-/*
-    public ArrayList<Movie> searchForText(List<Movie> movies, String searchText){
-        ArrayList<Movie> foundMovies = new ArrayList<>();
-        if (!searchText.isEmpty()){
-            for (Movie m : movies) {
-                if (m.getDescription().toLowerCase().contains(searchText.toLowerCase())){
-                    foundMovies.add(m);
-                }
-            }
-        }else {
-            foundMovies.addAll(allMovies);
-        }
-        return foundMovies;
-    }
-
-    public ArrayList<Movie> filterByGenre(ArrayList<Movie> movies, String genre){
-        ArrayList<Movie> filteredList = new ArrayList<>();
-        for (Movie m : movies) {
-            if(m.getGenres() != null){
-                for (Genre g : m.getGenres()) {
-                    if (g.toString().equals(genre)){
-                        filteredList.add(m);
-                        break;
-                    }
-                }
-            }
-        }
-        return filteredList;
-    }*/
 
     public void resetMovies(ArrayList<Movie> movies){
         this.observableMovies.removeAll(observableMovies);
@@ -199,18 +186,34 @@ public class HomeController implements Initializable {
     }
 
     public String getMostPopularActor(List<Movie> movies){
+        Stream.of(movies).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .max(Map.Entry.comparingByValue())
+                .ifPresent(System.out::println);
+
+
         return null;
     }
 
     public int getLongestMovieTitle(List<Movie> movies){
-        return 1;
+        Optional<String> movieTitle = movies.stream()
+                .map(title -> title.getTitle())
+                .max(Comparator.comparingInt(String::length));
+
+
+        return movieTitle.get().length();
     }
 
     public long countMoviesFrom(List<Movie> movies, String director){
-        return 1;
+        return movies.stream()
+                .flatMap(movie -> movie.getDirectors().stream())
+                .filter(direc -> direc.equals(director)).count();
     }
 
     public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear){
-        return null;
+        return movies.stream()
+                .filter(movie -> movie.getYear() >= startYear && movie.getYear() <= endYear)
+                .collect(Collectors.toList());
     }
 }
