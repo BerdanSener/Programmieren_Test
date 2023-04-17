@@ -156,4 +156,21 @@ public class HomeController implements Initializable {
         sortBtn.setText("Sort (asc)");
         searchField.setText("");
     }
+
+    String getMostPopularActor(List<Movie> movies){
+
+        return null;
+    }
+
+    int getLongestMovieTitle(List<Movie> movies){
+        return 1;
+    }
+
+    long countMoviesFrom(List<Movie> movies, String director){
+        return 1;
+    }
+
+    List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear){
+        return null;
+    }
 }

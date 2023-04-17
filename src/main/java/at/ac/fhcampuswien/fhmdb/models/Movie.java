@@ -1,7 +1,11 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
+import okhttp3.OkHttp;
+import okhttp3.OkHttpClient;
+
 import java.util.ArrayList;
 import java.util.List;
+
 
 public class Movie {
     private String title;
@@ -27,6 +31,7 @@ public class Movie {
 
     public static List<Movie> initializeMovies(){
         List<Movie> movies = new ArrayList<>();
+
 
         //Film 1 -> Wolf of Wallstreet
         List<Genre> genres = new ArrayList<>();
