@@ -13,12 +13,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.SpinnerValueFactory;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -38,10 +43,10 @@ public class HomeController implements Initializable {
     public JFXComboBox genreComboBox;
 
     @FXML
-    public JFXComboBox releaseYearComboBox;
+    public TextField releaseYearField;
 
     @FXML
-    public JFXComboBox ratingComboBox;
+    public TextField ratingField;
 
     @FXML
     public JFXButton sortBtn;
@@ -62,7 +67,6 @@ public class HomeController implements Initializable {
             for(Movie testmovies : getMoviesBetweenYears(movies, 1999, 2005)){
                 System.out.println("Title: " + testmovies.getTitle());
             }
-            //System.out.println(getMoviesBetweenYears(movies, 1999, 2005));
 
 
             System.out.println(countMoviesFrom(movies, "Frank Darabont"));
@@ -78,7 +82,6 @@ public class HomeController implements Initializable {
 
         genreComboBox.getItems().addAll(Genre.toStringArray());
         genreComboBox.setPromptText("Filter by Genre");
-
 
 
 
@@ -142,12 +145,12 @@ public class HomeController implements Initializable {
         if(this.genreComboBox.getValue() != null){
             params.put("genre", this.genreComboBox.getValue() + "");
         }
-        /*if(this.ratingComboBox.getValue() != null){
-            params.put("ratingFrom", this.ratingComboBox.getValue() + "");
+        if(!this.ratingField.getText().isEmpty() && this.ratingField.getText().matches("^[1-9](\\.[0-9])?$|^10(\\.0)?$")){
+            params.put("ratingFrom", this.ratingField.getText());
         }
-        /*if(this.releaseYearComboBox.getValue() != null){
-            params.put("releaseYear", this.releaseYearComboBox.getValue() + "");
-        }*/
+        if(!this.releaseYearField.getText().isEmpty() && this.releaseYearField.getText().matches("^(19[0-9]{2}|20[0-1][0-9]|202[0-3])$")){
+            params.put("releaseYear", this.releaseYearField.getText());
+        }
         if (!this.searchField.getText().isEmpty()){
             params.put("query", this.searchField.getText());
         }
@@ -172,8 +175,8 @@ public class HomeController implements Initializable {
             throw new RuntimeException(e);
         }
         this.genreComboBox.getSelectionModel().clearSelection();
-        this.ratingComboBox.getSelectionModel().clearSelection();
-        this.releaseYearComboBox.getSelectionModel().clearSelection();
+        this.ratingField.setText("");
+        this.releaseYearField.setText("");
         sortBtn.setText("Sort (asc)");
         searchField.setText("");
     }
@@ -181,7 +184,6 @@ public class HomeController implements Initializable {
     public String getMostPopularActor(List<Movie> movies){
         Map<String, Long> movieActor = movies.stream()
                 .flatMap(movie -> movie.getMainCast().stream())
-                .filter(title -> title != null)
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
 
         Optional<Map.Entry<String, Long>> highestAmount = movieActor.entrySet().stream().max(Map.Entry.comparingByValue());

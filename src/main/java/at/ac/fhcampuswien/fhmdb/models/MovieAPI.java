@@ -14,7 +14,7 @@ import java.util.Map;
 
 public class MovieAPI {
 
-    private static String url = " https://prog2.fh-campuswien.ac.at/movies";
+    private static String url = "https://prog2.fh-campuswien.ac.at/movies";
 
     public static ArrayList<Movie> loadMovies(HashMap<String, String> params) throws IOException {
         HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
