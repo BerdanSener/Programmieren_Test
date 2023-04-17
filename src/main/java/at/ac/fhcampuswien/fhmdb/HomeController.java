@@ -96,6 +96,7 @@ public class HomeController implements Initializable {
         });
         searchBtn.setOnAction(actionEvent -> searchMovies());
         resetBtn.setOnAction(actionEvent -> resetMovies());
+
     }
 
 
@@ -197,20 +198,19 @@ public class HomeController implements Initializable {
         searchField.setText("");
     }
 
-    String getMostPopularActor(List<Movie> movies){
-
+    public String getMostPopularActor(List<Movie> movies){
         return null;
     }
 
-    int getLongestMovieTitle(List<Movie> movies){
+    public int getLongestMovieTitle(List<Movie> movies){
         return 1;
     }
 
-    long countMoviesFrom(List<Movie> movies, String director){
+    public long countMoviesFrom(List<Movie> movies, String director){
         return 1;
     }
 
-    List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear){
+    public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear){
         return null;
     }
 }
