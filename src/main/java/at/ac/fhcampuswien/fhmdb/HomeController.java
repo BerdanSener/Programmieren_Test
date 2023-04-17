@@ -79,20 +79,9 @@ public class HomeController implements Initializable {
         genreComboBox.getItems().addAll(Genre.toStringArray());
         genreComboBox.setPromptText("Filter by Genre");
 
-        releaseYearComboBox.getItems().add(1994);
-        releaseYearComboBox.setPromptText("Filter by Release Year");
 
-        ratingComboBox.getItems().add(10);
-        ratingComboBox.getItems().add(9);
-        ratingComboBox.getItems().add(8);
-        ratingComboBox.getItems().add(7);
-        ratingComboBox.getItems().add(6);
-        ratingComboBox.getItems().add(5);
-        ratingComboBox.getItems().add(4);
-        ratingComboBox.getItems().add(3);
-        ratingComboBox.getItems().add(2);
-        ratingComboBox.getItems().add(1);
-        ratingComboBox.setPromptText("Filter by Rating");
+
+
         // initialize UI stuff
 
 
@@ -153,12 +142,12 @@ public class HomeController implements Initializable {
         if(this.genreComboBox.getValue() != null){
             params.put("genre", this.genreComboBox.getValue() + "");
         }
-        if(this.ratingComboBox.getValue() != null){
+        /*if(this.ratingComboBox.getValue() != null){
             params.put("ratingFrom", this.ratingComboBox.getValue() + "");
         }
-        if(this.releaseYearComboBox.getValue() != null){
+        /*if(this.releaseYearComboBox.getValue() != null){
             params.put("releaseYear", this.releaseYearComboBox.getValue() + "");
-        }
+        }*/
         if (!this.searchField.getText().isEmpty()){
             params.put("query", this.searchField.getText());
         }
@@ -203,7 +192,7 @@ public class HomeController implements Initializable {
 
     public int getLongestMovieTitle(List<Movie> movies){
         Optional<String> movieTitle = movies.stream()
-                .map(title -> title.getTitle())
+                .map(movie -> movie.getTitle())
                 .max(Comparator.comparingInt(String::length));
 
 
@@ -217,8 +206,9 @@ public class HomeController implements Initializable {
     }
 
     public List<Movie> getMoviesBetweenYears(List<Movie> movies, int startYear, int endYear){
+
         return movies.stream()
-                .filter(movie -> movie.getYear() >= startYear && movie.getYear() <= endYear)
+                .filter(movie -> (movie.getYear() >= startYear) && (movie.getYear() <= endYear))
                 .collect(Collectors.toList());
     }
 }
