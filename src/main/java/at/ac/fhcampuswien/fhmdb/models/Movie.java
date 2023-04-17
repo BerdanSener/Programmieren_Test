@@ -3,6 +3,7 @@ package at.ac.fhcampuswien.fhmdb.models;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 
 public class Movie {
@@ -17,6 +18,7 @@ public class Movie {
     public int lengthInMinutes;
     public ArrayList<String> directors;
     public ArrayList<String> writers;
+
     public ArrayList<String> mainCast;
     public double rating;
 
@@ -101,4 +103,8 @@ public class Movie {
     }
 
     public int getYear() {return releaseYear;}
+
+    public ArrayList<String> getMainCast() {
+        return mainCast;
+    }
 }

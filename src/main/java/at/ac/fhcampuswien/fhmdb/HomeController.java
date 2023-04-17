@@ -5,6 +5,7 @@ import at.ac.fhcampuswien.fhmdb.models.Movie;
 import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
 import at.ac.fhcampuswien.fhmdb.models.MoviesSchema;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
@@ -67,6 +68,7 @@ public class HomeController implements Initializable {
             System.out.println(countMoviesFrom(movies, "Frank Darabont"));
 
             System.out.println(getLongestMovieTitle(movies));
+            System.out.println(getMostPopularActor(movies));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -188,14 +190,15 @@ public class HomeController implements Initializable {
     }
 
     public String getMostPopularActor(List<Movie> movies){
-        Stream.of(movies).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
-                .entrySet()
-                .stream()
-                .max(Map.Entry.comparingByValue())
-                .ifPresent(System.out::println);
+        Map<String, Long> movieActor = movies.stream()
+                .flatMap(movie -> movie.getMainCast().stream())
+                .filter(title -> title != null)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+
+        Optional<Map.Entry<String, Long>> highestAmount = movieActor.entrySet().stream().max(Map.Entry.comparingByValue());
 
 
-        return null;
+        return highestAmount.get().getKey();
     }
 
     public int getLongestMovieTitle(List<Movie> movies){
