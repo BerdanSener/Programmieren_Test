@@ -194,6 +194,8 @@ public class HomeController implements Initializable {
             throw new RuntimeException(e);
         }
         this.genreComboBox.getSelectionModel().clearSelection();
+        this.ratingComboBox.getSelectionModel().clearSelection();
+        this.releaseYearComboBox.getSelectionModel().clearSelection();
         sortBtn.setText("Sort (asc)");
         searchField.setText("");
     }
