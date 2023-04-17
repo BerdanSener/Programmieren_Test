@@ -2,25 +2,21 @@ package at.ac.fhcampuswien.fhmdb;
 
 import at.ac.fhcampuswien.fhmdb.models.Genre;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
+import at.ac.fhcampuswien.fhmdb.models.MoviesSchema;
 import at.ac.fhcampuswien.fhmdb.ui.MovieCell;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
-import javafx.beans.InvalidationListener;
-import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 
+import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class HomeController implements Initializable {
     @FXML
@@ -38,6 +34,12 @@ public class HomeController implements Initializable {
     public JFXComboBox genreComboBox;
 
     @FXML
+    public JFXComboBox releaseYearComboBox;
+
+    @FXML
+    public JFXComboBox ratingComboBox;
+
+    @FXML
     public JFXButton sortBtn;
 
     public List<Movie> allMovies = Movie.initializeMovies();
@@ -47,12 +49,33 @@ public class HomeController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        observableMovies.addAll(allMovies);         // add dummy data to observable list
+        try {
+            ArrayList<Movie> movies = MovieAPI.loadMovies();
+            observableMovies.addAll(movies);         // add dummy data to observable list
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
         movieListView.setItems(observableMovies);   // set data of observable list to list view
         movieListView.setCellFactory(movieListView -> new MovieCell()); // use custom cell factory to display data
 
         genreComboBox.getItems().addAll(Genre.toStringArray());
         genreComboBox.setPromptText("Filter by Genre");
+
+        releaseYearComboBox.getItems().add(1994);
+        releaseYearComboBox.setPromptText("Filter by Release Year");
+
+        ratingComboBox.getItems().add(10);
+        ratingComboBox.getItems().add(9);
+        ratingComboBox.getItems().add(8);
+        ratingComboBox.getItems().add(7);
+        ratingComboBox.getItems().add(6);
+        ratingComboBox.getItems().add(5);
+        ratingComboBox.getItems().add(4);
+        ratingComboBox.getItems().add(3);
+        ratingComboBox.getItems().add(2);
+        ratingComboBox.getItems().add(1);
+        ratingComboBox.setPromptText("Filter by Rating");
         // initialize UI stuff
 
 
@@ -107,14 +130,27 @@ public class HomeController implements Initializable {
     }
 
     public void searchMovies() {
-        ArrayList<Movie> filteredMovies = new ArrayList<>();
-        filteredMovies = searchForText(allMovies, this.searchField.getText());
-        if (this.genreComboBox.getValue() != null){
-            filteredMovies = filterByGenre(filteredMovies, this.genreComboBox.getValue().toString());
+        HashMap<String, String> params = new HashMap<>();
+        if(this.genreComboBox.getValue() != null){
+            params.put("genre", this.genreComboBox.getValue() + "");
         }
-        resetMovies(filteredMovies);
-    }
+        if(this.ratingComboBox.getValue() != null){
+            params.put("ratingFrom", this.ratingComboBox.getValue() + "");
+        }
+        if(this.releaseYearComboBox.getValue() != null){
+            params.put("releaseYear", this.releaseYearComboBox.getValue() + "");
+        }
+        if (!this.searchField.getText().isEmpty()){
+            params.put("query", this.searchField.getText());
+        }
 
+        try {
+            resetMovies(MovieAPI.loadMovies(params));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+/*
     public ArrayList<Movie> searchForText(List<Movie> movies, String searchText){
         ArrayList<Movie> foundMovies = new ArrayList<>();
         if (!searchText.isEmpty()){
@@ -142,7 +178,7 @@ public class HomeController implements Initializable {
             }
         }
         return filteredList;
-    }
+    }*/
 
     public void resetMovies(ArrayList<Movie> movies){
         this.observableMovies.removeAll(observableMovies);
@@ -151,7 +187,11 @@ public class HomeController implements Initializable {
 
     public void resetMovies(){
         this.observableMovies.removeAll(observableMovies);
-        this.observableMovies.addAll(allMovies);
+        try {
+            this.observableMovies.addAll(MovieAPI.loadMovies());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         this.genreComboBox.getSelectionModel().clearSelection();
         sortBtn.setText("Sort (asc)");
         searchField.setText("");
