@@ -189,11 +189,13 @@ public class HomeController implements Initializable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-        this.genreComboBox.getSelectionModel().clearSelection();
-        this.ratingField.setText("");
-        this.releaseYearField.setText("");
-        sortBtn.setText("Sort (asc)");
-        searchField.setText("");
+        try {
+            this.genreComboBox.getSelectionModel().clearSelection();
+            this.ratingField.setText("");
+            this.releaseYearField.setText("");
+            sortBtn.setText("Sort (asc)");
+            searchField.setText("");
+        }catch (NullPointerException e){}
     }
 
     public String getMostPopularActor(List<Movie> movies){
