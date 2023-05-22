@@ -1,7 +1,10 @@
 package at.ac.fhcampuswien.fhmdb.models;
 
-import java.lang.reflect.Array;
+import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
+
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
@@ -83,6 +86,18 @@ public class Movie {
         ArrayList<Movie> list = new ArrayList<>();
         for (MoviesSchema movie:movies) {
             Movie m = new Movie(movie.getTitle(), movie.getDescription(), Genre.stringToGenre(movie.getGenres()), movie.id, movie.releaseYear, movie.imgUrl, movie.lengthInMinutes, movie.directors, movie.writers, movie.mainCast, movie.rating);
+            list.add(m);
+        }
+        return list;
+    }
+
+    public static ArrayList<Movie> watchlistToMovie(List<WatchlistMovieEntity> movies){
+        ArrayList<Movie> list = new ArrayList<>();
+        for (WatchlistMovieEntity movie:movies) {
+            String[] elements = movie.getGenres().split(",");
+            List<String> fixedLenghtList = Arrays.asList(elements);
+            ArrayList<String> genresList = new ArrayList<String>(fixedLenghtList);
+            Movie m = new Movie(movie.getTitle(), movie.getDescription(), Genre.stringToGenre(genresList), movie.getApiId(), movie.getReleaseYear(), movie.getImgUrl(), movie.getLengthInMinutes(), null, null, null, movie.getRating());
             list.add(m);
         }
         return list;

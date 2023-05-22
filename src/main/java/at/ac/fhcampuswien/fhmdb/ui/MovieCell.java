@@ -1,7 +1,11 @@
 package at.ac.fhcampuswien.fhmdb.ui;
 
+import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
+import at.ac.fhcampuswien.fhmdb.models.ClickEventHandler;
 import at.ac.fhcampuswien.fhmdb.models.Movie;
+import at.ac.fhcampuswien.fhmdb.models.MovieAPI;
 import javafx.geometry.Insets;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.layout.Background;
@@ -9,12 +13,23 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+
 public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
     private final Label genre = new Label();
-    private final VBox layout = new VBox(title, detail, genre);
+    private final Button watchlist = new Button("Watchlist");
+    private final Button details = new Button("Show Details");
+    private final VBox layout = new VBox(title, detail, genre, watchlist, details);
+    private boolean check;
 
+    public MovieCell(ClickEventHandler clickEventHandler){
+        super();
+        watchlist.setOnMouseClicked( (event) -> {
+            clickEventHandler.onClick(getItem());
+        });
+    }
 
     @Override
     protected void updateItem(Movie movie, boolean empty) {

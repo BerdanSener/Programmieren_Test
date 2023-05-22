@@ -12,6 +12,42 @@ public class WatchlistMovieEntity {
     @DatabaseField(generatedId = true)
     private long id;
 
+    public long getId() {
+        return id;
+    }
+
+    public String getApiId() {
+        return apiId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getGenres() {
+        return genres;
+    }
+
+    public int getReleaseYear() {
+        return releaseYear;
+    }
+
+    public String getImgUrl() {
+        return imgUrl;
+    }
+
+    public int getLengthInMinutes() {
+        return lengthInMinutes;
+    }
+
+    public double getRating() {
+        return rating;
+    }
+
     @DatabaseField()
     private String apiId;
 
@@ -63,15 +99,8 @@ public class WatchlistMovieEntity {
     }
 
     public String genresToString(List<Genre> genres) {
-        String genreString = null;
-        for(int i = 0; i < genres.size(); i++){
-            if(i < (genres.size() - 1)){
-                genreString += String.valueOf(genres.get(i)) + ", ";
-            }
-            genreString += String.valueOf(genres.get(i));
-        }
-
-        return genreString;
+        String genreString = genres.toString();
+        return genreString.substring(1, genreString.length()-1);
     }
 }
 
