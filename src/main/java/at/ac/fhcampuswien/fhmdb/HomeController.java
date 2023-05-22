@@ -13,10 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 import java.io.IOException;
@@ -52,16 +49,23 @@ public class HomeController implements Initializable {
     @FXML
     public JFXButton sortBtn;
 
+
     public List<Movie> allMovies = Movie.initializeMovies();
 
     private final ObservableList<Movie> observableMovies = FXCollections.observableArrayList();   // automatically updates corresponding UI elements when underlying data changes
 
     private WatchlistRepository watchlistRepository = new WatchlistRepository();
 
-    private final ClickEventHandler onAddToWatchlistClicked = (movie) -> {
+    private final ClickEventHandler onAddToWatchlistClicked = (movie, b) -> {
         WatchlistMovieEntity m = new WatchlistMovieEntity(movie);
         try {
-            watchlistRepository.addToWatchlist(m);
+            if(!b) {
+                watchlistRepository.addToWatchlist(m);
+                //System.out.println("add bednigs");
+            }else{
+                watchlistRepository.removeFromWatchlist(m);
+                //System.out.println("remove bedingung: " + m.getTitle());
+            }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -227,10 +231,12 @@ public class HomeController implements Initializable {
 
     public void toHomeScreen(Event event) {
         resetMovies();
+        MovieCell.setCheck(false);
     }
 
     public void toWatchlistScreen(Event event) throws SQLException {
         this.resetMovies(Movie.watchlistToMovie(this.watchlistRepository.getAll()));
+        MovieCell.setCheck(true);
     }
 
     public void toAboutScreen(Event event) {

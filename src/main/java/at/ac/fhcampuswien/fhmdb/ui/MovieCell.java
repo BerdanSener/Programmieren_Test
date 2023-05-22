@@ -19,16 +19,23 @@ public class MovieCell extends ListCell<Movie> {
     private final Label title = new Label();
     private final Label detail = new Label();
     private final Label genre = new Label();
-    private final Button watchlist = new Button("Watchlist");
+    private final Button watchlist = new Button();
     private final Button details = new Button("Show Details");
     private final VBox layout = new VBox(title, detail, genre, watchlist, details);
-    private boolean check;
+    private static boolean check = false;
 
     public MovieCell(ClickEventHandler clickEventHandler){
         super();
-        watchlist.setOnMouseClicked( (event) -> {
-            clickEventHandler.onClick(getItem());
+        watchlist.setOnAction( (event) -> {
+
+            if(((Button) event.getSource()).getText().equals("Add to Watchlist")){
+                clickEventHandler.onClick(getItem(), false);
+            }
+            if (((Button) event.getSource()).getText().equals("Remove")){
+                clickEventHandler.onClick(getItem(), true);
+            }
         });
+
     }
 
     @Override
@@ -48,6 +55,12 @@ public class MovieCell extends ListCell<Movie> {
             );
             genre.setText(movie.getGenres().toString());
 
+            if(check == false){
+                watchlist.setText("Add to Watchlist");
+            }
+            else{
+                watchlist.setText("Remove");
+            }
 
             // color scheme
             title.getStyleClass().add("text-yellow");
@@ -64,6 +77,12 @@ public class MovieCell extends ListCell<Movie> {
             layout.alignmentProperty().set(javafx.geometry.Pos.CENTER_LEFT);
             setGraphic(layout);
         }
+    }
+
+
+    public static void setCheck(boolean b){
+        MovieCell.check = b;
+
     }
 }
 
