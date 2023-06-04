@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.DBException;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistMovieEntity;
 import at.ac.fhcampuswien.fhmdb.database.WatchlistRepository;
 import at.ac.fhcampuswien.fhmdb.models.*;
@@ -70,6 +71,9 @@ public class HomeController implements Initializable {
             throw new RuntimeException(e);
         }
     };
+
+    public HomeController() throws DBException {
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {

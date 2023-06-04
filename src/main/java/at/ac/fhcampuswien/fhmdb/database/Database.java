@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.DBException;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -23,17 +24,17 @@ public class Database {
 
     private static Database instance;
 
-    private Database(){
+    private Database() throws DBException{
         try{
             createConnectionSource();
             dao = DaoManager.createDao(connectionSource, WatchlistMovieEntity.class);
             createTables();
         }catch (SQLException e){
-            System.out.println(e.getMessage());
+            throw new DBException("Fehler beim Laden der Datenbank!", e);
         }
     }
 
-    public static Database getDatabase(){
+    public static Database getDatabase() throws DBException{
         if(instance == null){
             instance = new Database();
         }
@@ -44,9 +45,13 @@ public class Database {
         connectionSource = new JdbcConnectionSource(DB_URL, username, password);
     }
 
-    public void testDB() throws SQLException {
-        WatchlistMovieEntity watchlistMovieEntity = new WatchlistMovieEntity("123", "test", "halo123", "comedy", 1999, "blablabal", 120, 9.2);
-        dao.create(watchlistMovieEntity);
+    public void testDB() throws DBException {
+        try{
+            WatchlistMovieEntity watchlistMovieEntity = new WatchlistMovieEntity("123", "test", "halo123", "comedy", 1999, "blablabal", 120, 9.2);
+            dao.create(watchlistMovieEntity);
+        }catch (SQLException e){
+            throw new DBException("Fehler beim Erstellen des Testeintrags der Datenbank.", e);
+        }
     }
 
     public void createTables() throws SQLException {

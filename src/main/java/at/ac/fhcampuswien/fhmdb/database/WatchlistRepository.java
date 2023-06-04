@@ -1,5 +1,6 @@
 package at.ac.fhcampuswien.fhmdb.database;
 
+import at.ac.fhcampuswien.fhmdb.Exceptions.DBException;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -10,19 +11,37 @@ public class WatchlistRepository {
     Dao<WatchlistMovieEntity, Long> dao;
 
 
-    public WatchlistRepository(){
+    public WatchlistRepository() throws DBException{
         this.dao = Database.getDatabase().getDao();
     }
 
-    public void removeFromWatchlist(WatchlistMovieEntity movie) throws SQLException {
-        dao.delete(movie);
+    public void removeFromWatchlist(WatchlistMovieEntity movie) throws DBException {
+        try {
+            dao.delete(movie);
+            System.out.println("hallo entfertn");
+        } catch (SQLException e) {
+            throw new DBException("Fehler beim Entfernen des Eintrags in der Datenbank", e);
+        }
+
     }
 
     public List<WatchlistMovieEntity> getAll() throws SQLException {
         return dao.queryForAll();
     }
 
-    public void addToWatchlist(WatchlistMovieEntity movie) throws SQLException {
-        dao.create(movie);
+
+    //frage???
+    public void addToWatchlist(WatchlistMovieEntity movie) throws DBException {
+        try {
+            if (dao.queryForEq("title", movie.getTitle()).isEmpty()) {
+                try {
+                    dao.create(movie);
+                } catch (SQLException e) {
+                    throw new DBException("Fehler beim Erstellen des Eintrags in der Datenbank", e);
+                }
+            }
+        } catch (SQLException e) {
+            throw new DBException("Fehler bei der Anfrage der Datenbank ", e);
+        }
     }
 }

@@ -12,6 +12,30 @@ public class WatchlistMovieEntity {
     @DatabaseField(generatedId = true)
     private long id;
 
+    @DatabaseField()
+    private String apiId;
+
+    @DatabaseField()
+    private String title;
+
+    @DatabaseField()
+    private String description;
+
+    @DatabaseField()
+    private String genres;
+
+    @DatabaseField()
+    private int releaseYear;
+
+    @DatabaseField()
+    private String imgUrl;
+
+    @DatabaseField()
+    private int lengthInMinutes;
+
+    @DatabaseField()
+    private double rating;
+
     public long getId() {
         return id;
     }
@@ -48,29 +72,7 @@ public class WatchlistMovieEntity {
         return rating;
     }
 
-    @DatabaseField()
-    private String apiId;
 
-    @DatabaseField()
-    private String title;
-
-    @DatabaseField()
-    private String description;
-
-    @DatabaseField()
-    private String genres;
-
-    @DatabaseField()
-    private int releaseYear;
-
-    @DatabaseField()
-    private String imgUrl;
-
-    @DatabaseField()
-    private int lengthInMinutes;
-
-    @DatabaseField()
-    private double rating;
 
 
     public WatchlistMovieEntity(){
