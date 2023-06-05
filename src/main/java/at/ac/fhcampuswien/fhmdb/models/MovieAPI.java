@@ -18,16 +18,15 @@ public class MovieAPI {
     private static String url = "https://prog2.fh-campuswien.ac.at/movies";
 
     public static ArrayList<Movie> loadMovies(HashMap<String, String> params) throws MovieAPIException {
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
+        for (Map.Entry<String, String> e:params.entrySet()) {
+            urlBuilder.addQueryParameter(e.getKey(), e.getValue());
+        }
+
+        String customUrl = urlBuilder.build().toString();
+
+        OkHttpClient client = new OkHttpClient();
         try{
-            HttpUrl.Builder urlBuilder = HttpUrl.parse(url).newBuilder();
-            for (Map.Entry<String, String> e:params.entrySet()) {
-                urlBuilder.addQueryParameter(e.getKey(), e.getValue());
-            }
-
-            String customUrl = urlBuilder.build().toString();
-
-            OkHttpClient client = new OkHttpClient();
-
             Request request = new Request.Builder()
                     .url(customUrl)
                     .addHeader("User-Agent", "http.agent")
@@ -55,9 +54,9 @@ public class MovieAPI {
     }
 
     public static ArrayList<Movie> loadMovies() throws IOException{
-        try{
-            OkHttpClient client = new OkHttpClient();
 
+        OkHttpClient client = new OkHttpClient();
+        try{
             Request request = new Request.Builder()
                     .url(url)
                     .addHeader("User-Agent", "http.agent")
